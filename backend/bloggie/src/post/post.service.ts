@@ -1,4 +1,4 @@
-import { Injectable, Body, Get } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BlogPost } from '../post/post.entity';
 import { Repository } from 'typeorm';
@@ -12,16 +12,17 @@ export class PostService {
   ) {}
 
   async createBlogPost(blogPostData: BlogPostDto): Promise<BlogPost> {
-    const post = this.postRepository.create(blogPostData);
-    post.createdAt = new Date();
+    const post = await this.postRepository.create(blogPostData);
     return await this.postRepository.save(post);
   }
 
   async getBlogPost(blogPostId: string): Promise<BlogPost> {
-    return this.postRepository.findOneBy({ id: blogPostId });
+    const post = await this.postRepository.findOneBy({ id: blogPostId });
+    if (!post) throw new NotFoundException();
+    return post;
   }
 
   async getAllBlogPosts(): Promise<BlogPost[]> {
-    return this.postRepository.find();
+    return await this.postRepository.find();
   }
 }

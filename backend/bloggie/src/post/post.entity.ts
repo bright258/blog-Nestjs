@@ -10,7 +10,4 @@ export class BlogPost {
 
   @Column()
   author: string;
-
-  @Column()
-  createdAt: Date;
 }

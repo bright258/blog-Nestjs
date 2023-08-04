@@ -5,6 +5,4 @@ export class BlogPostDto {
 
   @IsNotEmpty()
   author: string;
-
-  createdAt: Date;
 }
